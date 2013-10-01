@@ -13,6 +13,7 @@ if os.path.exists(README_fn):
 version = '0.1dev'
 
 install_requires = [
+    'httplib2'
 ]
 
 testing_extras = [
@@ -36,8 +37,8 @@ setup(
     license='BSD',
     packages=find_packages(),
     include_package_data=True,
-    package_data = {
-        },
+    package_data={
+    },
     zip_safe=False,
     install_requires=install_requires,
     extras_require={
