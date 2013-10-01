@@ -44,6 +44,5 @@ setup(
     install_requires=install_requires,
     extras_require={
         'testing': testing_extras,
-    },
-    test_suite='pysmscom',
+    }
 )
