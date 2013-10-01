@@ -20,6 +20,7 @@ testing_extras = [
     'nose==1.2.1',
     'nosexcover==1.0.8',
     'coverage==3.6',
+    'mock==1.0.1',
 ]
 
 setup(

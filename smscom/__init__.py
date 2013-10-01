@@ -1,9 +1,8 @@
 """
 Module that implements SMS using ip1 SMS service.
 """
-
-import httplib2
-import urllib
+from httplib2 import Http
+from urllib import urlencode
 import getopt
 import sys
 
@@ -61,10 +60,11 @@ class SMSClient(object):
         @return Return True if delivery was successful, if an error occurred with the SMS service a status message
         is returned. If an httplib error occur the httplib response object is returned.
         """
-        http = httplib2.Http()
-        query = urllib.urlencode({'msg': msg, 'acc': self.acc, 'pass': self.apikey, 'from': sender,
+        http = Http()
+        query = urlencode({'msg': msg, 'acc': self.acc, 'pass': self.apikey, 'from': sender,
                                   'prio': prio, 'to': to})
         resp, content = http.request("https://web.smscom.se/sendsms.aspx?%s" % query)
+
         if resp.status == 200:
             if content not in self.status_codes:
                 return True
