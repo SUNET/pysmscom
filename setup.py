@@ -10,7 +10,7 @@ README = 'smscom.se client'
 if os.path.exists(README_fn):
     README = open(README_fn).read()
 
-version = '0.2'
+version = '0.3'
 
 install_requires = [
     'httplib2'
