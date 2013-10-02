@@ -5,6 +5,7 @@ from httplib2 import Http
 from urllib import urlencode
 import getopt
 import sys
+import re
 
 
 class SMSClient(object):
@@ -60,6 +61,12 @@ class SMSClient(object):
         @return Return True if delivery was successful, if an error occurred with the SMS service a status message
         is returned. If an httplib error occur the httplib response object is returned.
         """
+        if not re.match('^\+?[0-9]+$', to):
+            raise ValueError("'to' is not a valid phone number")
+        if not re.match('^\+?[0-9]+$', sender):
+            if len(sender) > 11:
+                raise ValueError("'sender' is not a valid phone number or text length exceed 11 characters")
+
         http = Http()
         query = urlencode({'msg': msg, 'acc': self.acc, 'pass': self.apikey, 'from': sender,
                                   'prio': prio, 'to': to})
