@@ -17,14 +17,18 @@ class TestSmscom(TestCase):
     @patch('httplib2.Http.request')
     def test_send_sms_wrong_credentials(self, mock_request):
         mock_request.return_value = request_return_value(200, "101")
-        status = self.sms.send("Test", "Test sender", "+461111111")
-        self.assertEqual(status, SMSClient.status_codes['101'])
+        try:
+            self.sms.send("Test", "Test sender", "+461111111")
+        except Exception, e:
+            self.assertEqual(e.message, "Error code: %s, Description: %s" % ("101", SMSClient.status_codes["101"]))
 
     @patch('httplib2.Http.request')
     def test_send_sms_404(self, mock_request):
         mock_request.return_value = request_return_value(404, "101")
-        status = self.sms.send("Test", "Test sender", "+461111111")
-        self.assertEqual(status['status'], 404)
+        try:
+            self.sms.send("Test", "Test sender", "+461111111")
+        except Exception, e:
+            self.assertEquals(e.message, "HTTP error code: 404")
 
     def test_to_raise_value_error(self):
         try:
@@ -39,9 +43,15 @@ class TestSmscom(TestCase):
             pass
 
     @patch('httplib2.Http.request')
-    def test_to_valid_phone_number(self, mock_request):
+    def test_to_valid_e164_phone_number(self, mock_request):
         mock_request.return_value = request_return_value(200, "66666")
         self.assertTrue(self.sms.send("Test", "Test sender", "+46666666666"))
+
+    @patch('httplib2.Http.request')
+    def test_to_valid_phone_number(self, mock_request):
+        mock_request.return_value = request_return_value(200, "66666")
+        self.assertTrue(self.sms.send("Test", "Test sender", "0706666666666"))
+
 
     @patch('httplib2.Http.request')
     def test_sender_valid_phone_number(self, mock_request):
@@ -52,4 +62,4 @@ class TestSmscom(TestCase):
 def request_return_value(response_code, content):
     data = {'status': response_code, 'content-length': '3', 'content-location': 'https://example.com/', 'x-powered-by': 'ASP.NET', 'set-cookie': 'ASP.NET_SessionId=wf1bkl0d5vykfpihwv0hlnhc; path=/; HttpOnly', 'x-aspnet-version': '4.0.30319', 'server': 'Microsoft-IIS/7.0', 'cache-control': 'private', 'date': 'Tue, 01 Oct 2013 06:29:28 GMT', 'content-type': 'text/html; charset=utf-8'}
     resp = Response(data)
-    return (resp, content)
+    return resp, content

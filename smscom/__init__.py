@@ -76,9 +76,9 @@ class SMSClient(object):
             if content not in self.status_codes:
                 return True
             else:
-                return self.status_codes[content]
+                raise Exception("Error code: %s, Description: %s" % (content, self.status_codes[content]))
         else:
-            return resp
+            raise Exception("HTTP error code: %s" % resp.status)
 
 
 def main():
