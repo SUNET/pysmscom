@@ -12,7 +12,7 @@ class TestSmscom(TestCase):
     def test_send_sms_ok(self, mock_request):
         mock_request.return_value = request_return_value(200, "66666")
         status = self.sms.send("Test", "Test sender", "+461111111")
-        self.assertEqual(status, True)
+        self.assertEqual(status, "66666")
 
     @patch('httplib2.Http.request')
     def test_send_sms_wrong_credentials(self, mock_request):

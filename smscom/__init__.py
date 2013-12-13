@@ -58,7 +58,7 @@ class SMSClient(object):
         @type to: str
         @param prio: (optional) SMS urgency priority, possible values 1 (Group messages), 2 (Normal), 3 (Urgent).
         default is 2
-        @return Return True if delivery was successful, if an error occurred with the SMS service a status message
+        @return: Return transaction id if delivery was successful, if an error occurred with the SMS service a status message
         is returned. If an httplib error occur the httplib response object is returned.
         """
         if not re.match('^\+?[0-9]+$', to):
@@ -74,7 +74,7 @@ class SMSClient(object):
 
         if resp.status == 200:
             if content not in self.status_codes:
-                return True
+                return content
             else:
                 raise Exception("Error code: %s, Description: %s" % (content, self.status_codes[content]))
         else:
