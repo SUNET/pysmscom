@@ -1,0 +1,4 @@
+python_module: smscom
+python_source_directory: smscom
+publish_over_ssh: pypi.sunet.se
+clean_workspace: true
