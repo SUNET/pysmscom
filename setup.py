@@ -10,17 +10,18 @@ README = 'smscom.se client'
 if os.path.exists(README_fn):
     README = open(README_fn).read()
 
-version = '0.4'
+version = '0.5'
 
 install_requires = [
+    'six==1.11.0',
     'httplib2'
 ]
 
 testing_extras = [
-    'nose==1.2.1',
-    'nosexcover==1.0.8',
-    'coverage==3.6',
-    'mock==1.0.1',
+    'nose==1.3.7',
+    'nosexcover==1.0.11',
+    'coverage==4.5.1',
+    'mock==2.0.0',
 ]
 
 setup(

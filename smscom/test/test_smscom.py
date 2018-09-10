@@ -19,16 +19,16 @@ class TestSmscom(TestCase):
         mock_request.return_value = request_return_value(200, "101")
         try:
             self.sms.send("Test", "Test sender", "+461111111")
-        except Exception, e:
-            self.assertEqual(e.message, "Error code: %s, Description: %s" % ("101", SMSClient.status_codes["101"]))
+        except Exception as e:
+            self.assertEqual(e.args[0], "Error code: %s, Description: %s" % ("101", SMSClient.status_codes["101"]))
 
     @patch('httplib2.Http.request')
     def test_send_sms_404(self, mock_request):
         mock_request.return_value = request_return_value(404, "101")
         try:
             self.sms.send("Test", "Test sender", "+461111111")
-        except Exception, e:
-            self.assertEquals(e.message, "HTTP error code: 404")
+        except Exception as e:
+            self.assertEquals(e.args[0], "HTTP error code: 404")
 
     def test_to_raise_value_error(self):
         try:

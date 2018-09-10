@@ -2,7 +2,7 @@
 Module that implements SMS using ip1 SMS service.
 """
 from httplib2 import Http
-from urllib import urlencode
+from six.moves.urllib_parse import urlencode
 import getopt
 import sys
 import re
@@ -84,9 +84,9 @@ class SMSClient(object):
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'a:k:m:f:t:P')
-    except getopt.error, msg:
-        print msg
-        print __doc__
+    except getopt.error as msg:
+        print(msg)
+        print(__doc__)
         sys.exit(2)
 
     acc = None
@@ -111,9 +111,9 @@ def main():
                 sender = arg
             else:
                 raise ValueError("what about %s?" % opt)
-    except Exception, ex:
-        print ex
-        print __doc__
+    except Exception as ex:
+        print(ex)
+        print(__doc__)
         sys.exit(3)
 
     sms = SMSClient(acc=acc, apikey=apikey)
