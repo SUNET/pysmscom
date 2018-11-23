@@ -51,11 +51,11 @@ class SMSClient(object):
 
         @param msg: The message. If the message is over 160 characters the message will be split into multipe SMS
         messages, if the message is 161 characters you will be charged for two messages.
-        @type msg: str
+        @type msg: six.string_types
         @param sender: Phone number or a text string of max 11 characters.
-        @type sender: str
+        @type sender: six.string_types
         @param to: Mobile phone number in E.164 format ie (+46xxxxxxxx)
-        @type to: str
+        @type to: six.string_types
         @param prio: (optional) SMS urgency priority, possible values 1 (Group messages), 2 (Normal), 3 (Urgent).
         default is 2
         @return: Return transaction id if delivery was successful, if an error occurred with the SMS service a status message
@@ -67,9 +67,12 @@ class SMSClient(object):
             if len(sender) > 11:
                 raise ValueError("'sender' is not a valid phone number or text length exceed 11 characters")
 
+        # Make sure that we dont fail with UnicodeEncodeError
+        msg = msg.encode('utf-8')
+        sender = sender.encode('utf-8')
+
         http = Http()
-        query = urlencode({'msg': msg, 'acc': self.acc, 'pass': self.apikey, 'from': sender,
-                                  'prio': prio, 'to': to})
+        query = urlencode({'msg': msg, 'acc': self.acc, 'pass': self.apikey, 'from': sender, 'prio': prio, 'to': to})
         resp, content = http.request("https://web.smscom.se/sendsms.aspx?%s" % query)
 
         if resp.status == 200:
