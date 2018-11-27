@@ -17,7 +17,13 @@ class TestSmscom(TestCase):
         self.assertEqual(status, "66666")
 
     @patch('httplib2.Http.request')
-    def test_send_sms_ok_utf8(self, mock_request):
+    def test_send_sms_ok_non_ascii(self, mock_request):
+        mock_request.return_value = request_return_value(200, "66666")
+        status = self.sms.send("Täst", "Sänder", "+461111111")
+        self.assertEqual(status, "66666")
+
+    @patch('httplib2.Http.request')
+    def test_send_sms_ok_utf_8(self, mock_request):
         mock_request.return_value = request_return_value(200, "66666")
         status = self.sms.send(u"Täst", u"Täst sänder", u"+461111111")
         self.assertEqual(status, "66666")
