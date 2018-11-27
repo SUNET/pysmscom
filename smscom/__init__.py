@@ -2,6 +2,7 @@
 Module that implements SMS using ip1 SMS service.
 """
 from httplib2 import Http
+import six
 from six.moves.urllib_parse import urlencode
 import getopt
 import sys
@@ -68,8 +69,10 @@ class SMSClient(object):
                 raise ValueError("'sender' is not a valid phone number or text length exceed 11 characters")
 
         # Make sure that we dont fail with UnicodeEncodeError
-        msg = msg.encode('utf-8')
-        sender = sender.encode('utf-8')
+        if isinstance(msg, six.text_type):
+            msg = msg.encode('utf-8')
+        if isinstance(sender, six.text_type):
+            sender = sender.encode('utf-8')
 
         http = Http()
         query = urlencode({'msg': msg, 'acc': self.acc, 'pass': self.apikey, 'from': sender, 'prio': prio, 'to': to})
