@@ -14,26 +14,26 @@ class SMSClient(object):
     Class that implements SMS using ip1 SMS service.
     """
     status_codes = {
-        '0': 'Delivered to gateway',
-        '1': 'Gateway login failed',
-        '2': 'Invalid message content',
-        '3': 'Invalid phone number format',
-        '4': 'Insufficient funds',
-        '10': 'Received by the gateway',
-        '11': 'Delayed delivery',
-        '12': 'Delayed delivery cancelled',
-        '21': 'Delivered to the GSM network',
-        '22': 'Delivered to the phone',
-        '30': 'Insufficient funds',
-        '41': 'Invalid message content',
-        '42': 'Internal error',
-        '43': 'Delivery failed',
-        '50': 'General delivery error',
-        '51': 'Delivery to GSM network failed',
-        '52': 'Delivery to phone failed',
-        '100': 'Insufficient credits',
-        '101': 'Wrong account credentials',
-        '110': 'Parameter error'
+        u'0': 'Delivered to gateway',
+        u'1': 'Gateway login failed',
+        u'2': 'Invalid message content',
+        u'3': 'Invalid phone number format',
+        u'4': 'Insufficient funds',
+        u'10': 'Received by the gateway',
+        u'11': 'Delayed delivery',
+        u'12': 'Delayed delivery cancelled',
+        u'21': 'Delivered to the GSM network',
+        u'22': 'Delivered to the phone',
+        u'30': 'Insufficient funds',
+        u'41': 'Invalid message content',
+        u'42': 'Internal error',
+        u'43': 'Delivery failed',
+        u'50': 'General delivery error',
+        u'51': 'Delivery to GSM network failed',
+        u'52': 'Delivery to phone failed',
+        u'100': 'Insufficient credits',
+        u'101': 'Wrong account credentials',
+        u'110': 'Parameter error'
     }
 
     def __init__(self, acc, apikey):
@@ -77,6 +77,10 @@ class SMSClient(object):
         http = Http()
         query = urlencode({'msg': msg, 'acc': self.acc, 'pass': self.apikey, 'from': sender, 'prio': prio, 'to': to})
         resp, content = http.request("https://web.smscom.se/sendsms.aspx?%s" % query)
+
+        # Return utf-8 encoded unicode
+        if isinstance(content, six.binary_type):
+            content = content.decode('utf-8')
 
         if resp.status == 200:
             if content not in self.status_codes:
