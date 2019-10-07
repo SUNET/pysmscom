@@ -62,9 +62,9 @@ class SMSClient(object):
         @return: Return transaction id if delivery was successful, if an error occurred with the SMS service a status message
         is returned. If an httplib error occur the httplib response object is returned.
         """
-        if not re.match('^\+?[0-9]+$', to):
+        if not re.match(r'^\+?[0-9]+$', to):
             raise ValueError("'to' is not a valid phone number")
-        if not re.match('^\+?[0-9]+$', sender):
+        if not re.match(r'^\+?[0-9]+$', sender):
             if len(sender) > 11:
                 raise ValueError("'sender' is not a valid phone number or text length exceed 11 characters")
 
@@ -94,8 +94,8 @@ class SMSClient(object):
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'a:k:m:f:t:P')
-    except getopt.error as msg:
-        print(msg)
+    except getopt.error as e:
+        print(e)
         print(__doc__)
         sys.exit(2)
 
@@ -128,6 +128,7 @@ def main():
 
     sms = SMSClient(acc=acc, apikey=apikey)
     sms.send(msg=msg, to=to, sender=sender, prio=prio)
+
 
 if __name__ == "__main__":
     main()
