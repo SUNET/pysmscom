@@ -1,12 +1,11 @@
-sudo: required
 language: python
 python:
-  - "2.7"
-  - "3.6"
+  - "3.7"
 # command to install dependencies
 install:
-  - pip install -U setuptools
+  - pip install -U setuptools mypy
   - python setup.py testing
 # command to run tests
 script:
-  - nosetests
+  - pytest
+  - mypy --ignore-missing-imports smscom

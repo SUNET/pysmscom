@@ -1,5 +1,17 @@
-python_module: smscom
-python_source_directory: smscom
+builders:
+  - script
+triggers:
+  cron: "@weekly"
+slack:
+  room: "eduid-builds"
+script:
+  - "virtualenv -p python3.7 venv"
+  - ". venv/bin/activate"
+  - "pip install -U setuptools wheel mypy"
+  - "python setup.py testing"
+  - "pip freeze"
+  - "pytest"
+  - "python setup.py sdist bdist_wheel --universal"
 publish_over_ssh:
   - pypi.sunet.se
 clean_workspace: true

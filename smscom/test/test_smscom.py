@@ -42,7 +42,7 @@ class TestSmscom(TestCase):
         try:
             self.sms.send("Test", "Test sender", "+461111111")
         except Exception as e:
-            self.assertEquals(e.args[0], "HTTP error code: 404")
+            self.assertEqual(e.args[0], "HTTP error code: 404")
 
     def test_to_raise_value_error(self):
         try:
